@@ -30,6 +30,5 @@ defmodule PhoenixApiTemplate.Accounts.User do
     put_change(changeset, :hashed_password, Bcrypt.hash_pwd_salt(password))
   end
 
-  p
   defp put_password_hash(changeset), do: changeset
 end
