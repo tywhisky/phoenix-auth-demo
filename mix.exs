@@ -45,7 +45,8 @@ defmodule PhoenixApiTemplate.MixProject do
       {:guardian, "~> 2.0"},
       {:bcrypt_elixir, "~> 3.0"},
       {:envar, "~> 1.1.0"},
-      {:guardian_db, "~> 2.0"}
+      {:guardian_db, "~> 2.0"},
+      {:ecto_sqlite3, "~> 0.16"}
     ]
   end
 
