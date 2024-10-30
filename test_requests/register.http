@@ -1,0 +1,14 @@
+POST http://localhost:4000/api/register HTTP/1.1
+content-type: application/json
+
+{ 
+  "user": {
+
+    "email": "test5@yopmail.com",
+    "hashed_password": "yolo",
+    "profile":  {
+      "display_name": "test user"
+    }
+  }
+}
+ 

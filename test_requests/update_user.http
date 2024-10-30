@@ -1,0 +1,9 @@
+PUT http://localhost:4000/api/users/eae6f03c-6276-48e3-b6df-0797b2f8cb99 HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJwaG9lbml4X2FwaV90ZW1wbGF0ZSIsImV4cCI6MTY3OTE1Njk5NiwiaWF0IjoxNjc2NzM3Nzk2LCJpc3MiOiJwaG9lbml4X2FwaV90ZW1wbGF0ZSIsImp0aSI6Ijk0ZjJlOGQ5LTJkZmYtNDM4Zi1hY2Y4LWZiMzAwODJmZDU2YiIsIm5iZiI6MTY3NjczNzc5NSwic3ViIjoiZWFlNmYwM2MtNjI3Ni00OGUzLWI2ZGYtMDc5N2IyZjhjYjk5IiwidHlwIjoiYWNjZXNzIn0.32jNDsUQZemN6V_sR8xZtmlQp1kECPEcS63yCR655HlyWYsaNYCF3t4Wi37to6lmYUuE8QUD0qI3BHkqhroScQ
+
+{
+    "user": {
+        "hashed_password": "safe"
+    }
+}
