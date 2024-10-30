@@ -2,13 +2,15 @@ import Config
 
 # Configure your database
 config :phoenix_api_template, PhoenixApiTemplate.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "phoenix_api_template_dev",
-  stacktrace: true,
-  show_sensitive_data_on_connection_error: true,
-  pool_size: 10
+  database: "/Users/taine/sqlite3dbs/phoenix_api_template_dev"
+
+# username: "postgres",
+# password: "postgres",
+# hostname: "localhost",
+# database: "phoenix_api_template_dev",
+# stacktrace: true,
+# show_sensitive_data_on_connection_error: true,
+# pool_size: 10
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
