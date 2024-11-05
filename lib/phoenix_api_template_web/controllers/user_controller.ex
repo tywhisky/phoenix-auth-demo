@@ -44,11 +44,15 @@ defmodule PhoenixApiTemplateWeb.UserController do
 
   defp authorize_account(conn, email, hash_password) do
     case Guardian.authenticate(email, hash_password) do
-      {:ok, user, token} ->
+      {:ok, user, token, claims} ->
         conn
         |> Plug.Conn.put_session(:user_id, user.id)
         |> put_status(:ok)
-        |> render("user_token.json", %{user: user, token: token})
+        |> render("user_token.json", %{
+          user: user,
+          token: token,
+          expired_at: claims["exp"] * 1_000
+        })
 
       {:error, :unauthorized} ->
         raise Unauthorized, message: "Invalid credentials"

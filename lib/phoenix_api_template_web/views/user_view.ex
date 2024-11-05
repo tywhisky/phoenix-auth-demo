@@ -18,11 +18,12 @@ defmodule PhoenixApiTemplateWeb.UserView do
     }
   end
 
-  def render("user_token.json", %{user: user, token: token}) do
+  def render("user_token.json", %{user: user, token: token, expired_at: expired_at}) do
     %{
       id: user.id,
       email: user.email,
-      token: token
+      token: token,
+      expired_at: expired_at
     }
   end
 end
