@@ -11,8 +11,6 @@ import Config
 # before starting your production server.
 config :phoenix_api_template, PhoenixApiTemplateWeb.Endpoint, cache_static_manifest: "priv/static/cache_manifest.json"
 
-config :phoenix_api_template, PhoenixApiTemplate.Repo,
-  database: "/home/ecs-user/Projects/login-service/login_service"
 # Do not print debug messages in production
 config :logger, level: :info
 

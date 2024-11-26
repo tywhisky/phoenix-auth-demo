@@ -1,17 +1,30 @@
-FROM ubuntu:trusty
-RUN sudo apt-get -y update
-RUN sudo apt-get -y upgrade
-RUN sudo apt-get install -y sqlite3 libsqlite3-dev
-RUN mkdir /db
-RUN /usr/bin/sqlite3 /db/test.db
-CMD /bin/bash
+# Find eligible builder and runner images on Docker Hub. We use Ubuntu/Debian instead of
+# Alpine to avoid DNS resolution issues in production.
+#
+# https://hub.docker.com/r/hexpm/elixir/tags?page=1&name=ubuntu
+# https://hub.docker.com/_/ubuntu?tab=tags
+#
+#
+# This file is based on these images:
+#
+#   - https://hub.docker.com/r/hexpm/elixir/tags - for the build image
+#   - https://hub.docker.com/_/debian?tab=tags&page=1&name=bullseye-20241111-slim - for the release image
+#   - https://pkgs.org/ - resource for finding needed packages
+#   - Ex: hexpm/elixir:1.14.5-erlang-25.3.2.15-debian-bullseye-20241111-slim
+#
+ARG ELIXIR_VERSION=1.14.5
+ARG OTP_VERSION=25.3.2.15
+ARG DEBIAN_VERSION=bullseye-20241111-slim
 
-ARG MIX_ENV="prod"
+ARG BUILDER_IMAGE="hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-debian-${DEBIAN_VERSION}"
+ARG RUNNER_IMAGE="debian:${DEBIAN_VERSION}"
 
-FROM hexpm/elixir:1.11.2-erlang-23.1.2-alpine-3.12.1 as build
+FROM ${BUILDER_IMAGE} as builder
+ENV ERL_FLAGS="+JPperf true"
 
 # install build dependencies
-RUN apk add --no-cache build-base git python3 curl
+RUN apt-get update -y && apt-get install -y build-essential git \
+    && apt-get clean && rm -f /var/lib/apt/lists/*_*
 
 # prepare build dir
 WORKDIR /app
@@ -21,7 +34,6 @@ RUN mix local.hex --force && \
     mix local.rebar --force
 
 # set build ENV
-ARG MIX_ENV
 ENV MIX_ENV="prod"
 
 # install mix dependencies
@@ -32,45 +44,49 @@ RUN mkdir config
 # copy compile-time config files before we compile dependencies
 # to ensure any relevant config change will trigger the dependencies
 # to be re-compiled.
-COPY config/config.exs config/$MIX_ENV.exs config/
+COPY config/config.exs config/${MIX_ENV}.exs config/
 RUN mix deps.compile
 
 COPY priv priv
 
-# compile and build the release
 COPY lib lib
+
+# Compile the release
 RUN mix compile
-# changes to config/runtime.exs don't require recompiling the code
+
+# Changes to config/runtime.exs don't require recompiling the code
 COPY config/runtime.exs config/
-# uncomment COPY if rel/ exists
-# COPY rel rel
+
+COPY rel rel
 RUN mix release
 
 # start a new build stage so that the final image will only contain
 # the compiled release and other runtime necessities
-FROM alpine:3.12.1 AS app
-RUN apk add --no-cache libstdc++ openssl ncurses-libs
+FROM ${RUNNER_IMAGE}
 
-ARG MIX_ENV
-ENV USER="elixir"
+RUN apt-get update -y && apt-get install -y libstdc++6 openssl libncurses5 locales \
+  && apt-get clean && rm -f /var/lib/apt/lists/*_*
 
-WORKDIR "/home/${USER}/app"
-# Creates an unprivileged user to be used exclusively to run the Phoenix app
-RUN \
-  addgroup \
-   -g 1000 \
-   -S "${USER}" \
-  && adduser \
-   -s /bin/sh \
-   -u 1000 \
-   -G "${USER}" \
-   -h "/home/${USER}" \
-   -D "${USER}" \
-  && su "${USER}"
+# Set the locale
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && locale-gen
 
-# Everything from this line onwards will run in the context of the unprivileged user.
-USER "${USER}"
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 
-COPY --from=build --chown="${USER}":"${USER}" /app/_build/"${MIX_ENV}"/rel/my_app ./
+WORKDIR "/app"
+RUN chown nobody /app
 
-ENTRYPOINT ["bin/my_app"]
+# set runner ENV
+ENV MIX_ENV="prod"
+ENV DATABASE_URL="/home/ecs-user/Projects/login-service/login_service"
+ENV SECRET_KEY_BASE="ScaZExkyXsNs3SYgY85+hfT3FHkx6/lEP0nT+zjYE4nGkns3wqD6TCwaMQ3Z24lF"
+ENV PORT=4200
+ENV GUARDIAN_SECRET_KEY="3pxt7J6nBXJdl3BAFpOrj730WvIoBcpRGoo85xluZXP7nfFZM4lT94AkIbmatp2I"
+
+# Only copy the final release from the build stage
+COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/phoenix_api_template ./
+
+USER nobody
+
+CMD ["/app/bin/server"]
