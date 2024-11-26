@@ -2,7 +2,7 @@ import Config
 
 # Configure your database
 config :phoenix_api_template, PhoenixApiTemplate.Repo,
-  database: "/Users/taine/sqlite3dbs/phoenix_api_template_dev"
+  database: "/Users/taine/sqlite3dbs/login_service"
 
 # username: "postgres",
 # password: "postgres",

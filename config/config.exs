@@ -24,9 +24,9 @@ config :logger, :console,
   metadata: [:request_id]
 
 # Guardian config
-config :phoenix_api_template, PhoenixApiTemplateWeb.Auth.Guardian,
+config :phoenix_api_template, PhoenixApiTemplateWeb.Guardian,
   issuer: "phoenix_api_template",
-  secret_key: ""
+  secret_key: "lL6GDIKd/yFYIePepx1FofkXMWkVqvwQG/EvOJhwmX4uEZOYi9L1SmVjDVu+kK8W"
 
 config :guardian, Guardian.DB,
   repo: PhoenixApiTemplate.Repo,

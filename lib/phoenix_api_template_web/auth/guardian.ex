@@ -1,4 +1,4 @@
-defmodule PhoenixApiTemplateWeb.Auth.Guardian do
+defmodule PhoenixApiTemplateWeb.Guardian do
   use Guardian, otp_app: :phoenix_api_template
   alias PhoenixApiTemplate.Accounts
 

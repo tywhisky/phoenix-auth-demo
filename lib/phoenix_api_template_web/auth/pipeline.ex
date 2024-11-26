@@ -1,8 +1,8 @@
 defmodule PhoenixApiTemplateWeb.Auth.Pipeline do
   use Guardian.Plug.Pipeline,
     otp_app: :phoenix_api_template,
-    module: PhoenixApiTemplateWeb.Auth.Guardian,
-    error_handler: PhoenixApiTemplateWeb.Auth.GuardianErrorHandler
+    module: PhoenixApiTemplateWeb.Guardian,
+    error_handler: PhoenixApiTemplateWeb.GuardianErrorHandler
 
   plug Guardian.Plug.VerifySession
   plug Guardian.Plug.VerifyHeader
