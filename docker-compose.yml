@@ -2,31 +2,10 @@ version: '3.8'
 
 services:
   app:
-    image: elixir:1.15
-    container_name: phoenix_app
-    working_dir: /app
+    image: login-service:latest
     volumes:
-      - .:/app
-    command: >
-      sh -c "
-        mix local.hex --force &&
-        mix local.rebar --force &&
-        mix deps.get &&
-        mix ecto.setup &&
-        mix phx.server
-      "
+      - .:/data
     ports:
       - "4200:4200"
-    depends_on:
-      - db
     environment:
       MIX_ENV: dev
-      DATABASE_URL: "sqlite3:///data/app.db"
-
-  db:
-    image: nouchka/sqlite3
-    container_name: sqlite_db
-    volumes:
-      - ./data:/data
-    environment:
-      SQLITE_DATABASE: "/data/app.db"

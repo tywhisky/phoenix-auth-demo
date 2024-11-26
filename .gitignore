@@ -33,6 +33,10 @@ phoenix_api_template-*.tar
 # Local History for Visual Studio Code
 .history/
 
+database/
+login_service
+login_service-shm
+login_service-wal
 # Built Visual Studio Code Extensions
 *.vsix
 

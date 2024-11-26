@@ -34,7 +34,7 @@ RUN mix local.hex --force && \
     mix local.rebar --force
 
 # set build ENV
-ENV MIX_ENV="prod"
+ENV MIX_ENV="dev"
 
 # install mix dependencies
 COPY mix.exs mix.lock ./
@@ -78,8 +78,8 @@ WORKDIR "/app"
 RUN chown nobody /app
 
 # set runner ENV
-ENV MIX_ENV="prod"
-ENV DATABASE_URL="/home/ecs-user/Projects/login-service/login_service"
+ENV MIX_ENV="dev"
+# ENV DATABASE_URL="/data/login_service.db"
 ENV SECRET_KEY_BASE="ScaZExkyXsNs3SYgY85+hfT3FHkx6/lEP0nT+zjYE4nGkns3wqD6TCwaMQ3Z24lF"
 ENV PORT=4200
 ENV GUARDIAN_SECRET_KEY="3pxt7J6nBXJdl3BAFpOrj730WvIoBcpRGoo85xluZXP7nfFZM4lT94AkIbmatp2I"
