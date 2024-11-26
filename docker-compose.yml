@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app:
-    image: login-service:latest
+    image: registry.cn-hangzhou.aliyuncs.com/insigma/bay-rewards:login-service
     volumes:
       - .:/data
     ports:

@@ -9,7 +9,7 @@ defmodule PhoenixApiTemplate.Application do
   def start(_type, _args) do
     children = [
       # Start the Ecto repository
-      PhoenixApiTemplate.Repo,
+      {PhoenixApiTemplate.Repo, [show_sensitive_data_on_connection_error: true]},
       # Start the Telemetry supervisor
       PhoenixApiTemplateWeb.Telemetry,
       # Start the PubSub system
