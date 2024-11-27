@@ -2,7 +2,7 @@ import Config
 
 # Configure your database
 config :phoenix_api_template, PhoenixApiTemplate.Repo,
-  database: "/data/login_service"
+  database: "./login_service"
 
 # username: "postgres",
 # password: "postgres",

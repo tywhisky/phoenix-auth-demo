@@ -79,6 +79,7 @@ RUN chown nobody /app
 
 # set runner ENV
 ENV MIX_ENV="dev"
+COPY login_service ./
 # ENV DATABASE_URL="/data/login_service.db"
 ENV SECRET_KEY_BASE="ScaZExkyXsNs3SYgY85+hfT3FHkx6/lEP0nT+zjYE4nGkns3wqD6TCwaMQ3Z24lF"
 ENV PORT=4200
